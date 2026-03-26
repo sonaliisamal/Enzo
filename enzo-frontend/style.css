@@ -404,3 +404,268 @@ body.login-page {
     color: #d633ff; /* Changes to purple on hover */
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   SIGN UP PAGE SPECIFIC STYLES 
+   ========================================= */
+
+body.signup-page {
+    /* Deep purple/blue gradient overlay matching your design */
+    background: linear-gradient(rgba(15, 10, 40, 0.75), rgba(15, 10, 40, 0.85)), url('images/signup.jpg') no-repeat center center/cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Using a serif font to match the elegant look in your screenshot */
+    font-family: 'Times New Roman', Times, serif; 
+    color: white;
+}
+
+.signup-logo {
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    font-family: serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+/* The main container holding the form */
+.signup-wrapper {
+    width: 100%;
+    max-width: 450px; /* Keeps the form relatively narrow and centered */
+    padding: 20px;
+    margin-top: 30px; 
+}
+
+.signup-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.signup-header h2 {
+    font-size: 2.2rem;
+    font-weight: normal;
+    margin-bottom: 5px;
+}
+
+.signup-header p {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between each input field */
+}
+
+/* Groups the label and input together */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-group label {
+    font-size: 1.2rem;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    /* Semi-transparent whitish/gray background */
+    background: rgba(255, 255, 255, 0.75); 
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #000;
+    font-family: 'Inter', sans-serif; /* Modern font for typed text */
+    outline: none;
+}
+
+.input-group input::placeholder {
+    color: #222;
+}
+
+.input-group input:focus {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 10px rgba(168, 50, 212, 0.5); /* Purple glow */
+}
+
+/* Small text at the bottom */
+.terms-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    color: #cccccc;
+    line-height: 1.5;
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+.terms-text p {
+    margin-bottom: 8px;
+}
+
+/* The purple submit button */
+.signup-btn {
+    background-color: #a832d4; /* Exact purple from your image */
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 180px;
+    margin: 0 auto; /* Centers the button */
+    display: block;
+    font-family: 'Inter', sans-serif;
+}
+
+.signup-btn:hover {
+    background-color: #8c26b3;
+}
+
+
+
+/* =========================================
+   EVENT DETAIL PAGE SPECIFIC STYLES 
+   ========================================= */
+
+body.event-detail-page {
+    /* Pure CSS to create the glowing blue dot matrix effect from your design */
+    background-color: #02000a;
+    background-image: 
+        radial-gradient(#1520b8 1px, transparent 1px),
+        radial-gradient(#1520b8 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    
+    /* Adds a subtle purple/blue glow behind the dots */
+    box-shadow: inset 0 0 200px rgba(50, 0, 150, 0.5);
+    min-height: 100vh;
+    color: white;
+}
+
+/* Centers the entire block on the screen */
+.detail-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 50px;
+    min-height: calc(100vh - 80px); /* Adjusts for the navbar height */
+}
+
+/* Two-column layout */
+.detail-container {
+    display: flex;
+    gap: 60px;
+    max-width: 1000px;
+    width: 100%;
+    align-items: flex-start;
+}
+
+/* --- Left Side: Poster --- */
+.detail-poster-box {
+    flex: 0.8;
+    background-color: #566573; /* Same gray border as the events page */
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.detail-poster-box img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- Right Side: Info --- */
+.detail-info-box {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Spacing between rows */
+    font-family: 'Inter', sans-serif;
+}
+
+/* Grid layout for perfect label/value alignment */
+.info-row {
+    display: grid;
+    grid-template-columns: 250px 1fr; /* 250px for the label, rest for value */
+    align-items: flex-start;
+}
+
+.info-label {
+    font-size: 1.2rem;
+    color: #f0f0f0;
+}
+
+.info-value {
+    font-size: 1.2rem;
+    color: white;
+}
+
+.description-text {
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+/* Vibrant Purple Join Button */
+.join-btn {
+    margin-top: 20px;
+    background: linear-gradient(90deg, #a832d4, #d633ff);
+    color: white;
+    border: none;
+    padding: 12px 50px; /* Makes it wide but not full-width */
+    font-size: 1.3rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Inter', sans-serif;
+    align-self: center; /* Centers the button under the text */
+}
+
+.join-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(168, 50, 212, 0.5);
+}
