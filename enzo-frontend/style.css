@@ -14,6 +14,23 @@ body {
     min-height: 100vh;
 }
 
+body {
+    /* 1. Set the image path */
+     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/a.jpg') no-repeat center center/cover;
+    
+    /* 2. Make sure it covers the whole screen without stretching */
+    background-size: cover; 
+    
+    /* 3. Keep the image centered */
+    background-position: center center; 
+    
+    /* 4. Optional: Keep the image fixed in place when you scroll down */
+    background-attachment: fixed; 
+    
+    /* 5. Make sure the background doesn't repeat like tiles */
+    background-repeat: no-repeat; 
+}
+
 /* --- Navigation Bar --- */
 .navbar {
     display: flex;
@@ -240,6 +257,28 @@ body.login-page {
     justify-content: center;
 }
 
+body.login-page {
+    /* 1. Set the image path */
+     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/login-back.jpg') no-repeat center center/cover;
+    
+    /* 2. Make sure it covers the whole screen without stretching */
+    background-size: cover; 
+    
+    /* 3. Keep the image centered */
+    background-position: center center; 
+    
+    /* 4. Optional: Keep the image fixed in place when you scroll down */
+    background-attachment: fixed; 
+    
+    /* 5. Make sure the background doesn't repeat like tiles */
+    background-repeat: no-repeat; 
+}
+
+
+
+
+
+
 /* Absolute positioning for the logo to keep it top-left */
 .login-logo {
     position: absolute;
@@ -364,3 +403,4 @@ body.login-page {
 .signup-link a:hover {
     color: #d633ff; /* Changes to purple on hover */
 }
+
