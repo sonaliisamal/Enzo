@@ -182,3 +182,185 @@ body.events-page {
     object-fit: contain; /* Keeps the whole poster visible without cropping */
     display: block;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   LOGIN PAGE SPECIFIC STYLES 
+   ========================================= */
+
+body.login-page {
+    /* Replace with your specific concert background image */
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url('images/login-bg.jpg') no-repeat center center/cover;
+    height: 100vh;
+    overflow: hidden; /* Prevents scrolling on the login page */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Absolute positioning for the logo to keep it top-left */
+.login-logo {
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    font-family: serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: white;
+}
+
+/* Container splitting the page into two halves */
+.login-container {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 50px;
+}
+
+/* --- Left Side: Collage --- */
+.login-graphics {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+/* The image tag for your transparent collage PNG */
+.collage-img {
+    max-width: 100%;
+    height: auto;
+    /* Adding a slight floating animation to make it dynamic */
+    animation: float 6s ease-in-out infinite; 
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+/* --- Right Side: Form --- */
+.login-form-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the form block */
+    max-width: 400px;
+    margin-left: auto;
+}
+
+.login-form-wrapper h2 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin-bottom: 25px;
+    text-align: left;
+    width: 100%;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 15px;
+    /* Whitish frosted glass effect */
+    background: rgba(255, 255, 255, 0.85); 
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.login-form input::placeholder {
+    color: #555;
+}
+
+.login-form input:focus {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 10px rgba(176, 38, 255, 0.5); /* Purple glow on focus */
+}
+
+/* Vibrant Purple Login Button */
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(90deg, #9d26ff, #d633ff);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Inter', sans-serif;
+    margin-top: 5px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(157, 38, 255, 0.4);
+}
+
+.signup-link {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.signup-link a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.3s;
+}
+
+.signup-link a:hover {
+    color: #d633ff; /* Changes to purple on hover */
+}
