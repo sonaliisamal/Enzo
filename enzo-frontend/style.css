@@ -106,3 +106,79 @@ body {
     font-size: 1.5rem;
     font-weight: 400;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   EVENTS PAGE SPECIFIC STYLES 
+   ========================================= */
+
+/* The Events page has a solid dark blue gradient, not a photo background */
+body.events-page {
+    background: radial-gradient(circle at center, #0B253A, #040D14);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* Optional: Highlight the active page in the navbar */
+.nav-links a.active {
+    font-weight: bold;
+    border-bottom: 2px solid white;
+    padding-bottom: 2px;
+}
+
+/* The container that holds the grid */
+.all-events-container {
+    padding: 60px 50px;
+    display: flex;
+    justify-content: center;
+}
+
+/* The Grid System - Automatically adjusts columns based on screen size */
+.event-grid {
+    display: grid;
+    /* This creates responsive columns: min 250px wide, max 1 fraction of space */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 50px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* The gray bordered card holding the image */
+.poster-card {
+    background-color: #566573; /* The grayish border color from your image */
+    padding: 15px; /* Creates the border effect */
+    border-radius: 4px; /* Slight rounding on the corners */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.poster-card:hover {
+    transform: scale(1.03); /* Slight zoom on hover */
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+}
+
+/* The actual poster image inside the card */
+.poster-card img {
+    width: 100%;
+    height: auto;
+    object-fit: contain; /* Keeps the whole poster visible without cropping */
+    display: block;
+}
