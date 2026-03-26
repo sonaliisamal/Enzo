@@ -669,3 +669,198 @@ body.event-detail-page {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(168, 50, 212, 0.5);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   ABOUT US PAGE SPECIFIC STYLES 
+   ========================================= */
+
+body.about-page {
+    /* Set your textured blue background image here */
+    background: linear-gradient(rgba(0, 20, 50, 0.4), rgba(0, 20, 50, 0.6)), url('images/about-bg.jpg') no-repeat center center/cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: white;
+    /* Using a serif font for the entire page to match your screenshot */
+    font-family: 'Times New Roman', Times, serif; 
+}
+
+/* Container for all the text to keep it centered and readable */
+.about-container {
+    max-width: 900px;
+    margin: 0 auto; /* Centers the container */
+    padding: 60px 40px;
+}
+
+/* --- Top Section --- */
+.about-top {
+    text-align: left;
+    margin-bottom: 60px;
+}
+
+.about-top h2 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.about-top p {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    color: #f0f0f0;
+    max-width: 800px; /* Keeps the paragraph from getting too wide */
+}
+
+/* --- Bottom Section --- */
+.about-bottom {
+    text-align: center; /* Centers the heading */
+}
+
+.about-bottom h2 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+/* The two-column layout for the impact text */
+.impact-columns {
+    display: flex;
+    gap: 40px; /* Space between the two columns */
+    text-align: left; /* Text inside the columns aligns left */
+}
+
+.impact-text {
+    flex: 1; /* Makes both columns take up equal space (50/50) */
+}
+
+.impact-text p {
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: #e0e0e0;
+}
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   LOGOUT MODAL STYLES 
+   ========================================= */
+
+/* The dark, semi-transparent background overlay */
+.modal-overlay {
+    display: none; /* Hidden by default! JS will change this to 'flex' */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Darkens the rest of the screen */
+    z-index: 1000; /* Ensures it stays on top of everything else */
+    align-items: center;
+    justify-content: center;
+}
+
+/* The light gray popup box */
+.modal-content {
+    background-color: #dcdcdc; /* Light gray from your image */
+    padding: 30px 40px 40px 40px;
+    border-radius: 8px;
+    text-align: center;
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+    overflow: hidden; /* Keeps the monkey from sticking out of the box */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.modal-text {
+    color: #f72525; /* Bright red text */
+    font-family: 'Times New Roman', Times, serif; 
+    font-size: 2.2rem;
+    margin: 15px 0;
+    position: relative;
+    z-index: 2; /* Keeps text above the monkey */
+}
+
+/* The Red Logout Button */
+.modal-logout-btn {
+    background-color: #ff3b3b;
+    color: white;
+    border: none;
+    padding: 12px 40px;
+    font-size: 1.8rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif; 
+    position: relative;
+    z-index: 2; 
+    transition: transform 0.2s;
+}
+
+.modal-logout-btn:hover {
+    transform: scale(1.05); /* Slight zoom when hovering */
+}
+
+/* The Monkey Image */
+.monkey-img {
+    position: absolute;
+    bottom: -15px;
+    right: -20px;
+    width: 160px;
+    z-index: 1; /* Puts the monkey behind the text/button */
+}
