@@ -36,3 +36,47 @@ exports.createEvent = async (req, res) => {
         return res.status(500).json({ success: false, data: {}, message: "Failed to create event." });
     }
 };
+
+
+// Admin: Delete Event
+exports.deleteEvent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await db.query('DELETE FROM Events WHERE event_id = ?', [id]);
+        return res.status(200).json({ success: true, message: "Event deleted." });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Failed to delete event." });
+    }
+};
+
+
+// Get a single event by ID
+exports.getEventById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [event] = await db.query('SELECT * FROM Events WHERE event_id = ?', [id]);
+        
+        if (event.length === 0) {
+            return res.status(404).json({ success: false, message: "Event not found." });
+        }
+        return res.status(200).json({ success: true, data: event[0] });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error." });
+    }
+};
+
+// Admin: Update Event
+exports.updateEvent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, date, theme, max_capacity, start_time, end_time, description } = req.body;
+        
+        await db.query(
+            'UPDATE Events SET name=?, date=?, theme=?, max_capacity=?, start_time=?, end_time=?, description=? WHERE event_id=?',
+            [name, date, theme, max_capacity, start_time, end_time, description, id]
+        );
+        return res.status(200).json({ success: true, message: "Event updated successfully." });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Failed to update event." });
+    }
+};
