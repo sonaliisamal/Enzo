@@ -1,0 +1,108 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    /* Set the main background image here. The linear-gradient creates a dark overlay so text is readable */
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/background.jpg') no-repeat center center/cover;
+    background-attachment: fixed; /* Keeps background still while scrolling */
+    min-height: 100vh;
+}
+
+/* --- Navigation Bar --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background: transparent;
+}
+
+.logo {
+    font-family: serif; /* Matches the slightly decorative ENZO logo */
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: white;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #cccccc;
+}
+
+/* --- Hero Section --- */
+.hero {
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    padding-left: 50px; /* Aligns text with the logo */
+}
+
+.hero h1 {
+    font-family: 'Alfa Slab One', sans-serif; /* A chunky, bold font like your design */
+    font-size: 4rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7); /* Helps it pop off the background */
+}
+
+/* --- Events Section --- */
+.events-section {
+    /* Creates the darker, semi-transparent bar at the bottom */
+    background: rgba(20, 20, 30, 0.75); 
+    padding: 40px 50px 80px 50px;
+    text-align: center;
+    backdrop-filter: blur(5px); /* Adds a slight glass effect */
+}
+
+.events-section h2 {
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+.events-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    flex-wrap: wrap;
+}
+
+.event-card {
+    width: 300px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.event-card:hover {
+    transform: translateY(-5px); /* Small hover effect */
+}
+
+.event-img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover; /* Keeps images from stretching */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    margin-bottom: 15px;
+}
+
+.event-card h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
