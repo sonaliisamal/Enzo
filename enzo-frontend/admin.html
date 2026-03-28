@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENZO - Admin Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-page">
+
+    <nav class="navbar">
+        <div class="logo">ENZO</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="admin.html" class="active" style="color: #d633ff;">Dashboard</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h2>Event Management</h2>
+            <button id="openAddEventModal" class="add-event-btn">+ Create New Event</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Capacity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="adminEventsTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </main>
+
+    <div id="addEventModal" class="modal-overlay">
+        <div class="modal-content admin-modal">
+            <h3 style="color: black; margin-bottom: 20px;">Create New Event</h3>
+            
+            <form id="addEventForm" class="admin-form">
+                <input type="hidden" id="editEventId"> 
+                <input type="text" id="eventName" placeholder="Event Name" required>
+                <input type="date" id="eventDate" required>
+                <input type="text" id="eventTheme" placeholder="Theme (e.g., Tech, Music)">
+                <input type="number" id="eventCapacity" placeholder="Max Capacity" required>
+                <div style="display: flex; gap: 10px;">
+                    <input type="time" id="startTime" required>
+                    <input type="time" id="endTime" required>
+                </div>
+                <textarea id="eventDesc" placeholder="Event Description..." rows="3"></textarea>
+                
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="save-btn">Save Event</button>
+                    <button type="button" id="closeAddEventModal" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <div id="logoutModal" class="modal-overlay">
+        <div class="modal-content">
+            <p class="modal-text">So you just press</p>
+            <button id="confirmLogout" class="modal-logout-btn">Logout</button>
+            <p class="modal-text">and call it a night</p>
+            <img src="images/monkey.png" alt="Thinking Monkey" class="monkey-img">
+        </div>
+    </div>
+</body>
+</html>

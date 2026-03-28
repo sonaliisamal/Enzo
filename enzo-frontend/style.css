@@ -864,3 +864,176 @@ body.about-page {
     width: 160px;
     z-index: 1; /* Puts the monkey behind the text/button */
 }
+
+/* Inside style.css, find and update this section */
+
+/* The Monkey Image */
+.monkey-img {
+    position: absolute;
+    
+    /* 1. ADJUST THE POSITION (Push further into corner now that it's larger) */
+    bottom: -30px; /* Increase negative number to move down */
+    right: -30px;  /* Increase negative number to move right */
+    
+    /* 2. INCREASE THE SIZE (The most important part!) */
+    width: 250px; /* Was 160px. Change this number to go even bigger if you want. */
+    
+    z-index: 1; /* Puts the monkey behind the text/button */
+    
+    /* Optional: Add this to ensure aspect ratio stays perfect */
+    height: auto; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   ADMIN DASHBOARD STYLES 
+   ========================================= */
+
+body.admin-page {
+    background: #0a0a0f; /* Solid dark background for the dashboard */
+    min-height: 100vh;
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+
+.admin-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.admin-header h2 {
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.add-event-btn {
+    background: linear-gradient(90deg, #9d26ff, #d633ff);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* --- Admin Table --- */
+.table-wrapper {
+    background: #151520;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.admin-table th, .admin-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #2a2a35;
+}
+
+.admin-table th {
+    background-color: #1a1a25;
+    color: #a0a0a0;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+}
+
+.admin-table tr:hover {
+    background-color: #1e1e2d;
+}
+
+/* Action Buttons in Table */
+.delete-btn {
+    background: #ff3b3b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+/* --- Admin Form Modal --- */
+.admin-modal {
+    max-width: 500px !important;
+    text-align: left !important;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.admin-form input, .admin-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+}
+
+.save-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    flex: 1;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px;
+    flex: 1;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+.edit-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-right: 5px;
+}
