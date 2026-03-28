@@ -1,44 +1,75 @@
 const db = require('../db/connection');
 
-// Get all events
 exports.getAllEvents = async (req, res) => {
     try {
         const [events] = await db.query('SELECT * FROM Events');
-        return res.status(200).json({ success: true, data: events, message: "Events fetched successfully." });
+        return res.status(200).json({ success: true, data: events });
     } catch (error) {
-        return res.status(500).json({ success: false, data: {}, message: "Internal server error." });
+        return res.status(500).json({ success: false, message: "Server error." });
     }
 };
 
-// Search events by name
 exports.searchEvents = async (req, res) => {
     try {
-        const { q } = req.query; // e.g., /api/events/search?q=tech
+        const { q } = req.query;
         const [events] = await db.query('SELECT * FROM Events WHERE name LIKE ?', [`%${q}%`]);
-        return res.status(200).json({ success: true, data: events, message: "Search complete." });
+        return res.status(200).json({ success: true, data: events });
     } catch (error) {
-        return res.status(500).json({ success: false, data: {}, message: "Internal server error." });
+        return res.status(500).json({ success: false, message: "Server error." });
     }
 };
 
-// Admin: Create Event
+exports.getEventById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [event] = await db.query('SELECT * FROM Events WHERE event_id = ?', [id]);
+        if (event.length === 0) return res.status(404).json({ success: false, message: "Event not found." });
+        return res.status(200).json({ success: true, data: event[0] });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error." });
+    }
+};
+
 exports.createEvent = async (req, res) => {
     try {
         const { name, date, theme, max_capacity, start_time, end_time, description } = req.body;
+        const image_url = req.file ? `/uploads/${req.file.filename}` : null;
         
         const [result] = await db.query(
-            'INSERT INTO Events (name, date, theme, max_capacity, start_time, end_time, description) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [name, date, theme, max_capacity, start_time, end_time, description]
+            'INSERT INTO Events (name, date, theme, max_capacity, start_time, end_time, description, image_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [name, date, theme, max_capacity, start_time, end_time, description, image_url]
         );
 
-        return res.status(200).json({ success: true, data: { event_id: result.insertId }, message: "Event created successfully." });
+        return res.status(200).json({ success: true, message: "Event created successfully." });
     } catch (error) {
-        return res.status(500).json({ success: false, data: {}, message: "Failed to create event." });
+        return res.status(500).json({ success: false, message: "Failed to create event." });
     }
 };
 
+exports.updateEvent = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, date, theme, max_capacity, start_time, end_time, description } = req.body;
+        const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+        
+        // If they uploaded a new image, update it. Otherwise, leave the old image alone.
+        if (image_url) {
+            await db.query(
+                'UPDATE Events SET name=?, date=?, theme=?, max_capacity=?, start_time=?, end_time=?, description=?, image_url=? WHERE event_id=?',
+                [name, date, theme, max_capacity, start_time, end_time, description, image_url, id]
+            );
+        } else {
+            await db.query(
+                'UPDATE Events SET name=?, date=?, theme=?, max_capacity=?, start_time=?, end_time=?, description=? WHERE event_id=?',
+                [name, date, theme, max_capacity, start_time, end_time, description, id]
+            );
+        }
+        return res.status(200).json({ success: true, message: "Event updated successfully." });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Failed to update event." });
+    }
+};
 
-// Admin: Delete Event
 exports.deleteEvent = async (req, res) => {
     try {
         const { id } = req.params;
@@ -46,37 +77,5 @@ exports.deleteEvent = async (req, res) => {
         return res.status(200).json({ success: true, message: "Event deleted." });
     } catch (error) {
         return res.status(500).json({ success: false, message: "Failed to delete event." });
-    }
-};
-
-
-// Get a single event by ID
-exports.getEventById = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const [event] = await db.query('SELECT * FROM Events WHERE event_id = ?', [id]);
-        
-        if (event.length === 0) {
-            return res.status(404).json({ success: false, message: "Event not found." });
-        }
-        return res.status(200).json({ success: true, data: event[0] });
-    } catch (error) {
-        return res.status(500).json({ success: false, message: "Server error." });
-    }
-};
-
-// Admin: Update Event
-exports.updateEvent = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { name, date, theme, max_capacity, start_time, end_time, description } = req.body;
-        
-        await db.query(
-            'UPDATE Events SET name=?, date=?, theme=?, max_capacity=?, start_time=?, end_time=?, description=? WHERE event_id=?',
-            [name, date, theme, max_capacity, start_time, end_time, description, id]
-        );
-        return res.status(200).json({ success: true, message: "Event updated successfully." });
-    } catch (error) {
-        return res.status(500).json({ success: false, message: "Failed to update event." });
     }
 };

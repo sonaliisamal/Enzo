@@ -56,3 +56,32 @@ exports.cancelRegistration = async (req, res) => {
         return res.status(500).json({ success: false, data: {}, message: "Internal server error." });
     }
 };
+
+
+// 1. Check if a user is already registered (Returns true/false)
+exports.checkRegistration = async (req, res) => {
+    try {
+        const { eventId, userId } = req.params;
+        const [result] = await db.query('SELECT * FROM Registrations WHERE event_id = ? AND user_id = ?', [eventId, userId]);
+        return res.status(200).json({ success: true, isRegistered: result.length > 0 });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+// 2. Admin: Get all attendees for a specific event
+exports.getEventAttendees = async (req, res) => {
+    try {
+        const { eventId } = req.params;
+        const [attendees] = await db.query(`
+            SELECT u.name, u.reg_number, u.phone, u.email 
+            FROM Users u 
+            JOIN Registrations r ON u.user_id = r.user_id 
+            WHERE r.event_id = ?
+        `, [eventId]);
+        
+        return res.status(200).json({ success: true, count: attendees.length, data: attendees });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: "Server error" });
+    }
+};

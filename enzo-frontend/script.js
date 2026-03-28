@@ -200,21 +200,27 @@ if (window.location.pathname.includes('admin.html')) {
         const method = eventId ? 'PUT' : 'POST'; 
         const url = eventId ? `http://localhost:5000/api/events/${eventId}` : 'http://localhost:5000/api/events';
 
-        const eventData = {
-            name: document.getElementById('eventName').value,
-            date: document.getElementById('eventDate').value,
-            theme: document.getElementById('eventTheme').value,
-            max_capacity: document.getElementById('eventCapacity').value,
-            start_time: document.getElementById('startTime').value,
-            end_time: document.getElementById('endTime').value,
-            description: document.getElementById('eventDesc').value
-        };
+        // USE FORMDATA INSTEAD OF JSON SO WE CAN SEND FILES
+        const formData = new FormData();
+        formData.append('name', document.getElementById('eventName').value);
+        formData.append('date', document.getElementById('eventDate').value);
+        formData.append('theme', document.getElementById('eventTheme').value);
+        formData.append('max_capacity', document.getElementById('eventCapacity').value);
+        formData.append('start_time', document.getElementById('startTime').value);
+        formData.append('end_time', document.getElementById('endTime').value);
+        formData.append('description', document.getElementById('eventDesc').value);
+
+        // Grab the image file if they uploaded one
+        const imageFile = document.getElementById('eventImage').files[0];
+        if (imageFile) {
+            formData.append('image', imageFile); // 'image' matches the backend multer setup
+        }
 
         try {
             const response = await fetch(url, {
                 method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(eventData)
+                // Notice we REMOVED the 'Content-Type' header! The browser sets it automatically for FormData.
+                body: formData 
             });
             const data = await response.json();
 
@@ -245,12 +251,14 @@ if (window.location.pathname.includes('events.html')) {
 
             if (data.success) {
                 data.data.forEach((event, index) => {
-                    const imageNumber = (index % 6) + 1; 
+                    // Check if event has a database image, otherwise use a fallback poster
+                    const imageUrl = event.image_url ? `http://localhost:5000${event.image_url}` : `images/poster${(index % 6) + 1}.jpg`;
+                    
                     const card = document.createElement('div');
                     card.className = 'poster-card';
                     card.innerHTML = `
                         <a href="event-detail.html?id=${event.event_id}">
-                            <img src="images/poster${imageNumber}.jpg" alt="${event.name}">
+                            <img src="${imageUrl}" alt="${event.name}">
                         </a>
                     `;
                     eventsList.appendChild(card);
@@ -259,8 +267,7 @@ if (window.location.pathname.includes('events.html')) {
         } catch (error) {
             eventsList.innerHTML = '<p style="color:white;">Failed to load events.</p>';
         }
-    }
-    loadUserEvents(); 
+    } 
 }
 
 // ==========================================
@@ -279,12 +286,18 @@ if (window.location.pathname.includes('event-detail.html')) {
                 const event = data.data;
                 const eventDate = new Date(event.date).toLocaleDateString();
 
+                // Inject text data
                 document.getElementById('detailName').innerText = event.name;
                 document.getElementById('detailDate').innerText = eventDate;
                 document.getElementById('detailTheme').innerText = event.theme || "N/A";
                 document.getElementById('detailCapacity').innerText = event.max_capacity;
                 document.getElementById('detailTime').innerText = `${event.start_time} - ${event.end_time}`;
                 document.getElementById('detailDesc').innerText = event.description || "No description provided.";
+                
+                // Inject image data
+                const imageUrl = event.image_url ? `http://localhost:5000${event.image_url}` : `images/hacktag.jpeg`;
+                document.getElementById('detailPoster').src = imageUrl;
+
             } else {
                 alert("Event not found!");
                 window.location.href = 'events.html';
@@ -333,3 +346,4 @@ if (window.location.pathname.includes('event-detail.html')) {
         });
     }
 }
+

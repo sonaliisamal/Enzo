@@ -23,3 +23,8 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`🚀 ENZO Server running on port ${PORT}`);
 });
+
+// Middleware
+app.use(cors());
+app.use(express.json()); // Allows parsing JSON requests
+app.use('/uploads', express.static('uploads')); // <-- This belongs here!
