@@ -5,21 +5,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentUser = JSON.parse(localStorage.getItem('enzo_user'));
     const navLinksContainer = document.querySelector('.nav-links');
 
-    // Kick out if not logged in
     if (!currentUser && !window.location.pathname.includes('login.html') && !window.location.pathname.includes('signup.html')) {
         window.location.href = 'login.html';
     }
 
-    // Add Admin Dashboard link if user is admin
     if (currentUser && navLinksContainer && currentUser.role === 'admin') {
         if (!window.location.pathname.includes('admin.html')) {
             const adminLink = document.createElement('li');
-            adminLink.innerHTML = `<a href="admin.html" style="color: #d633ff; font-weight: bold;">Admin Dashboard</a>`;
+            adminLink.innerHTML = `<a href="admin.html" style="color: #d633ff; font-weight: bold;">Dashboard</a>`;
             navLinksContainer.prepend(adminLink);
         }
     }
 
-    // Logout Modal Logic
     const modal = document.getElementById('logoutModal');
     const confirmLogoutBtn = document.getElementById('confirmLogout');
     let logoutLink = null;
@@ -82,12 +79,14 @@ if (signupForm) {
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
+        const mobile = document.getElementById('mobile').value;
+        const regNumber = document.getElementById('reg-number').value;
         
         try {
             const response = await fetch('http://localhost:5000/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password, role: 'user' })
+                body: JSON.stringify({ name, email, password, role: 'user', phone: mobile, reg_number: regNumber })
             });
             const data = await response.json();
 
@@ -104,48 +103,7 @@ if (signupForm) {
 }
 
 // ==========================================
-// 3. GLOBAL DELETE AND EDIT FUNCTIONS
-// ==========================================
-async function deleteEvent(eventId) {
-    if (!confirm("Are you sure you want to delete this event?")) return; 
-    try {
-        const response = await fetch(`http://localhost:5000/api/events/${eventId}`, { method: 'DELETE' });
-        const data = await response.json();
-        if (data.success) {
-            alert("Event deleted successfully!");
-            window.location.reload(); 
-        }
-    } catch (error) {
-        alert("Error deleting event.");
-    }
-}
-
-window.openEditModal = async function(eventId) {
-    try {
-        const response = await fetch(`http://localhost:5000/api/events/${eventId}`);
-        const data = await response.json();
-
-        if (data.success) {
-            const ev = data.data;
-            document.getElementById('editEventId').value = ev.event_id;
-            document.getElementById('eventName').value = ev.name;
-            document.getElementById('eventDate').value = ev.date.split('T')[0]; 
-            document.getElementById('eventTheme').value = ev.theme;
-            document.getElementById('eventCapacity').value = ev.max_capacity;
-            document.getElementById('startTime').value = ev.start_time;
-            document.getElementById('endTime').value = ev.end_time;
-            document.getElementById('eventDesc').value = ev.description;
-
-            document.querySelector('#addEventModal h3').innerText = "Edit Event";
-            document.getElementById('addEventModal').style.display = 'flex';
-        }
-    } catch (error) {
-        alert("Failed to load event data.");
-    }
-};
-
-// ==========================================
-// 4. ADMIN DASHBOARD LOGIC
+// 3. ADMIN DASHBOARD LOGIC
 // ==========================================
 if (window.location.pathname.includes('admin.html')) {
     const tableBody = document.getElementById('adminEventsTableBody');
@@ -169,19 +127,58 @@ if (window.location.pathname.includes('admin.html')) {
                         <td>${event.max_capacity}</td>
                         <td>
                             <button class="edit-btn" onclick="openEditModal(${event.event_id})">Edit</button>
-                            <button class="delete-btn" onclick="deleteEvent(${event.event_id})">Delete</button>
+                            <button class="delete-btn" onclick="deleteEvent(${event.event_id})" style="background:#ff3b3b; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer;">Delete</button>
+                            <button onclick="viewAttendees(${event.event_id})" style="background:#9d26ff; color:white; border:none; padding:5px 10px; border-radius:4px; cursor:pointer; margin-left: 5px;">Attendees</button>
                         </td>
                     `;
                     tableBody.appendChild(row);
                 });
             }
-        } catch (error) {
-            console.error("Error loading events:", error);
-        }
+        } catch (error) { console.error(error); }
     }
-
     loadAdminEvents();
 
+    // Delete Event
+    window.deleteEvent = async function(eventId) {
+        if (!confirm("Are you sure you want to delete this event?")) return; 
+        try {
+            const response = await fetch(`http://localhost:5000/api/events/${eventId}`, { method: 'DELETE' });
+            const data = await response.json();
+            if (data.success) { alert("Event deleted!"); window.location.reload(); }
+        } catch (error) { alert("Error deleting event."); }
+    }
+
+    // View Attendees Modal Logic
+    window.viewAttendees = async function(eventId) {
+        try {
+            const response = await fetch(`http://localhost:5000/api/registrations/event/${eventId}/attendees`);
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById('totalAttendees').innerText = `Total Joined: ${data.count}`;
+                const tbody = document.getElementById('attendeesTableBody');
+                tbody.innerHTML = '';
+
+                data.data.forEach(user => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">${user.name}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">${user.reg_number || 'N/A'}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">${user.phone || 'N/A'}</td>
+                        <td style="padding: 10px; border-bottom: 1px solid #ccc;">${user.email}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                document.getElementById('attendeesModal').style.display = 'flex';
+            }
+        } catch (e) { alert("Failed to load attendees."); }
+    };
+
+    document.getElementById('closeAttendeesModal')?.addEventListener('click', () => {
+        document.getElementById('attendeesModal').style.display = 'none';
+    });
+
+    // Add/Edit Event Logic
     document.getElementById('openAddEventModal').addEventListener('click', () => {
         document.getElementById('editEventId').value = ''; 
         addEventForm.reset(); 
@@ -193,14 +190,34 @@ if (window.location.pathname.includes('admin.html')) {
         addEventModal.style.display = 'none';
     });
 
+    window.openEditModal = async function(eventId) {
+        try {
+            const response = await fetch(`http://localhost:5000/api/events/${eventId}`);
+            const data = await response.json();
+
+            if (data.success) {
+                const ev = data.data;
+                document.getElementById('editEventId').value = ev.event_id;
+                document.getElementById('eventName').value = ev.name;
+                document.getElementById('eventDate').value = ev.date.split('T')[0]; 
+                document.getElementById('eventTheme').value = ev.theme;
+                document.getElementById('eventCapacity').value = ev.max_capacity;
+                document.getElementById('startTime').value = ev.start_time;
+                document.getElementById('endTime').value = ev.end_time;
+                document.getElementById('eventDesc').value = ev.description;
+
+                document.querySelector('#addEventModal h3').innerText = "Edit Event";
+                addEventModal.style.display = 'flex';
+            }
+        } catch (error) { alert("Failed to load event."); }
+    };
+
     addEventForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-
         const eventId = document.getElementById('editEventId').value; 
         const method = eventId ? 'PUT' : 'POST'; 
         const url = eventId ? `http://localhost:5000/api/events/${eventId}` : 'http://localhost:5000/api/events';
 
-        // USE FORMDATA INSTEAD OF JSON SO WE CAN SEND FILES
         const formData = new FormData();
         formData.append('name', document.getElementById('eventName').value);
         formData.append('date', document.getElementById('eventDate').value);
@@ -210,35 +227,24 @@ if (window.location.pathname.includes('admin.html')) {
         formData.append('end_time', document.getElementById('endTime').value);
         formData.append('description', document.getElementById('eventDesc').value);
 
-        // Grab the image file if they uploaded one
         const imageFile = document.getElementById('eventImage').files[0];
-        if (imageFile) {
-            formData.append('image', imageFile); // 'image' matches the backend multer setup
-        }
+        if (imageFile) formData.append('image', imageFile); 
 
         try {
-            const response = await fetch(url, {
-                method: method,
-                // Notice we REMOVED the 'Content-Type' header! The browser sets it automatically for FormData.
-                body: formData 
-            });
+            const response = await fetch(url, { method: method, body: formData });
             const data = await response.json();
-
             if (data.success) {
-                alert(`Event ${eventId ? 'Updated' : 'Created'} Successfully!`);
+                alert(`Event Saved!`);
                 addEventModal.style.display = 'none'; 
                 addEventForm.reset(); 
-                document.getElementById('editEventId').value = ''; 
                 loadAdminEvents(); 
             }
-        } catch (error) {
-            console.error("Error saving event:", error);
-        }
+        } catch (error) { console.error(error); }
     });
 }
 
 // ==========================================
-// 5. DYNAMIC EVENTS PAGE LOGIC
+// 4. DYNAMIC EVENTS PAGE LOGIC
 // ==========================================
 if (window.location.pathname.includes('events.html')) {
     const eventsList = document.getElementById('eventsList');
@@ -251,14 +257,17 @@ if (window.location.pathname.includes('events.html')) {
 
             if (data.success) {
                 data.data.forEach((event, index) => {
-                    // Check if event has a database image, otherwise use a fallback poster
                     const imageUrl = event.image_url ? `http://localhost:5000${event.image_url}` : `images/poster${(index % 6) + 1}.jpg`;
                     
                     const card = document.createElement('div');
                     card.className = 'poster-card';
+                    card.style.flexDirection = 'column'; // Stack image and text
+                    
+                    // NEW: We add the H3 title below the image so it is always visible!
                     card.innerHTML = `
-                        <a href="event-detail.html?id=${event.event_id}">
-                            <img src="${imageUrl}" alt="${event.name}">
+                        <a href="event-detail.html?id=${event.event_id}" style="text-decoration: none; color: white;">
+                            <img src="${imageUrl}" alt="${event.name}" onerror="this.src='images/hacktag.jpeg'" style="background: #222; min-height: 200px;">
+                            <h3 style="text-align: center; margin-top: 15px; font-family: 'Inter', sans-serif;">${event.name}</h3>
                         </a>
                     `;
                     eventsList.appendChild(card);
@@ -268,14 +277,23 @@ if (window.location.pathname.includes('events.html')) {
             eventsList.innerHTML = '<p style="color:white;">Failed to load events.</p>';
         }
     } 
+    loadUserEvents();
 }
 
 // ==========================================
-// 6. EVENT DETAILS & JOIN LOGIC
+// 5. EVENT DETAILS & TOGGLE JOIN LOGIC
 // ==========================================
 if (window.location.pathname.includes('event-detail.html')) {
     const urlParams = new URLSearchParams(window.location.search);
     const eventId = urlParams.get('id');
+    const currentUser = JSON.parse(localStorage.getItem('enzo_user'));
+    const joinBtn = document.getElementById('joinEventBtn');
+    let isRegistered = false;
+
+    // 1. Hide Join button if Admin
+    if (currentUser && currentUser.role === 'admin' && joinBtn) {
+        joinBtn.style.display = 'none';
+    }
 
     async function loadEventDetails() {
         try {
@@ -286,7 +304,6 @@ if (window.location.pathname.includes('event-detail.html')) {
                 const event = data.data;
                 const eventDate = new Date(event.date).toLocaleDateString();
 
-                // Inject text data
                 document.getElementById('detailName').innerText = event.name;
                 document.getElementById('detailDate').innerText = eventDate;
                 document.getElementById('detailTheme').innerText = event.theme || "N/A";
@@ -294,56 +311,80 @@ if (window.location.pathname.includes('event-detail.html')) {
                 document.getElementById('detailTime').innerText = `${event.start_time} - ${event.end_time}`;
                 document.getElementById('detailDesc').innerText = event.description || "No description provided.";
                 
-                // Inject image data
                 const imageUrl = event.image_url ? `http://localhost:5000${event.image_url}` : `images/hacktag.jpeg`;
                 document.getElementById('detailPoster').src = imageUrl;
-
             } else {
                 alert("Event not found!");
                 window.location.href = 'events.html';
             }
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        } catch (error) { console.error("Error:", error); }
+    }
+
+    // 2. Check if already registered
+    async function checkStatus() {
+        if (!currentUser || currentUser.role === 'admin') return;
+        try {
+            const res = await fetch(`http://localhost:5000/api/registrations/check/${eventId}/${currentUser.user_id}`);
+            const data = await res.json();
+            if (data.success && data.isRegistered) {
+                isRegistered = true;
+                joinBtn.innerText = "Joined (Click to Cancel)";
+                joinBtn.style.background = "#28a745"; // Green
+            }
+        } catch(e) {}
     }
 
     if (eventId) {
         loadEventDetails();
+        checkStatus();
     } else {
         window.location.href = 'events.html'; 
     }
 
-    // Join Button Logic
-    const joinBtn = document.getElementById('joinEventBtn');
-    if (joinBtn) {
+    // 3. Handle Join / Cancel Click
+    if (joinBtn && (!currentUser || currentUser.role !== 'admin')) {
         joinBtn.addEventListener('click', async () => {
-            const currentUser = JSON.parse(localStorage.getItem('enzo_user'));
             if (!currentUser) {
                 alert("Please log in to join events!");
                 window.location.href = 'login.html';
                 return;
             }
 
-            try {
-                const response = await fetch('http://localhost:5000/api/registrations/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: currentUser.user_id, event_id: eventId })
-                });
-                const data = await response.json();
+            if (isRegistered) {
+                // Cancel Flow
+                if (!confirm("Are you sure you want to cancel your registration?")) return;
+                try {
+                    const response = await fetch('http://localhost:5000/api/registrations/cancel', {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: currentUser.user_id, event_id: eventId })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        isRegistered = false;
+                        joinBtn.innerText = "Join";
+                        joinBtn.style.background = "linear-gradient(90deg, #a832d4, #d633ff)"; // Back to purple
+                    }
+                } catch (e) { alert("Failed to cancel."); }
+            } else {
+                // Join Flow
+                try {
+                    const response = await fetch('http://localhost:5000/api/registrations/register', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ user_id: currentUser.user_id, event_id: eventId })
+                    });
+                    const data = await response.json();
 
-                if (data.success) {
-                    alert("Awesome! You have successfully joined the event.");
-                    joinBtn.innerText = "Joined";
-                    joinBtn.style.background = "#28a745"; 
-                    joinBtn.disabled = true; 
-                } else {
-                    alert(data.message); 
-                }
-            } catch (error) {
-                alert("Something went wrong. Please try again.");
+                    if (data.success) {
+                        isRegistered = true;
+                        joinBtn.innerText = "Joined (Click to Cancel)";
+                        joinBtn.style.background = "#28a745"; // Turn Green
+                    } else {
+                        alert(data.message); 
+                    }
+                } catch (error) { alert("Something went wrong."); }
             }
         });
     }
 }
-

@@ -69,6 +69,34 @@
         </div>
     </div>
 
+
+
+
+    <div id="attendeesModal" class="modal-overlay">
+        <div class="modal-content admin-modal" style="max-width: 600px; text-align: left;">
+            <h3 style="color: black; margin-bottom: 10px;">Event Attendees</h3>
+            <p id="totalAttendees" style="color: #333; font-weight: bold; margin-bottom: 20px;">Total Joined: 0</p>
+            
+            <div style="max-height: 300px; overflow-y: auto;">
+                <table class="admin-table" style="color: black; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="color: #444; background: #ddd;">Name</th>
+                            <th style="color: #444; background: #ddd;">Reg No.</th>
+                            <th style="color: #444; background: #ddd;">Phone</th>
+                            <th style="color: #444; background: #ddd;">Email</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendeesTableBody">
+                        </tbody>
+                </table>
+            </div>
+            
+            <button type="button" id="closeAttendeesModal" class="cancel-btn" style="margin-top: 20px;">Close</button>
+        </div>
+    </div>
+
+
     <script src="script.js"></script>
 
     <div id="logoutModal" class="modal-overlay">
