@@ -193,11 +193,13 @@ body.events-page {
 }
 
 /* The actual poster image inside the card */
+/* The actual poster image inside the grid card */
 .poster-card img {
     width: 100%;
-    height: auto;
-    object-fit: contain; /* Keeps the whole poster visible without cropping */
+    aspect-ratio: 4 / 5;       /* Forces the 4:5 portrait size */
+    object-fit: cover;         /* Zooms and crops perfectly without stretching */
     display: block;
+    border-radius: 2px;        /* Softens the image corners slightly */
 }
 
 
@@ -613,10 +615,13 @@ body.event-detail-page {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
 }
 
+/* The large poster on the Event Details page */
 .detail-poster-box img {
     width: 100%;
-    height: auto;
+    aspect-ratio: 4 / 5;       /* Matches the grid ratio */
+    object-fit: cover;         /* Zooms and crops perfectly */
     display: block;
+    border-radius: 4px;
 }
 
 /* --- Right Side: Info --- */
