@@ -16,7 +16,7 @@ body {
 
 body {
     /* 1. Set the image path */
-     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/a.jpg') no-repeat center center/cover;
+     background: linear-gradient(rgb(21, 0, 255, 0.2), rgb(21, 0, 255, 0.2)), url('images/a.jpg') no-repeat center center/cover;
     
     /* 2. Make sure it covers the whole screen without stretching */
     background-size: cover; 
@@ -159,53 +159,77 @@ body.events-page {
 }
 
 /* The container that holds the grid */
+/* The container that holds the grid */
 .all-events-container {
     padding: 60px 50px;
     display: flex;
-    justify-content: center;
-}
-
-/* The Grid System - Automatically adjusts columns based on screen size */
-.event-grid {
-    display: grid;
-    /* This creates responsive columns: min 250px wide, max 1 fraction of space */
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 50px;
-    max-width: 1200px;
-    width: 100%;
-}
-
-/* The gray bordered card holding the image */
-.poster-card {
-    background-color: #566573; /* The grayish border color from your image */
-    padding: 15px; /* Creates the border effect */
-    border-radius: 4px; /* Slight rounding on the corners */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
+    flex-direction: column; /* THIS FIXES THE LEFT GAP! */
     align-items: center;
 }
 
+
+
+/* The Grid System */
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 50px;
+    max-width: 1200px;
+    width: 100%;
+    
+    /* FIX 3: Changed 750px to a normal spacing number */
+    margin-top: 20px; 
+}
+
+/* The gray bordered card holding the image and text */
+.poster-card {
+    background-color: #566573; 
+    padding: 13px; 
+    border-radius: 8px; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column; /* Stacks image and text vertically */
+    width: 100%; /* Ensures the box fills the grid column */
+}
+
 .poster-card:hover {
-    transform: scale(1.03); /* Slight zoom on hover */
+    transform: scale(1.03); 
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
 }
 
-/* The actual poster image inside the card */
-/* The actual poster image inside the grid card */
-.poster-card img {
+/* Forces the clickable link to wrap everything properly */
+.poster-card a {
+    text-decoration: none;
+    color: white;
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    aspect-ratio: 4 / 5;       /* Forces the 4:5 portrait size */
-    object-fit: cover;         /* Zooms and crops perfectly without stretching */
-    display: block;
-    border-radius: 2px;        /* Softens the image corners slightly */
 }
 
+/* The exact 4:5 poster image inside the card */
+.poster-card img {
+    width: 100%;
+    aspect-ratio: 4 / 5;       /* Forces the perfect 4:5 portrait size */
+    object-fit: cover;         /* Crops perfectly without stretching */
+    display: block;
+    border-radius: 4px;
+    background: #222;          /* Dark fallback background before image loads */
+}
 
-
-
-
+/* The event title exactly below the image */
+.poster-card h3 {
+    text-align: center;
+    margin-top: 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    
+    /* These 3 lines prevent super long event names from breaking the box shape! */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
 
 
 
@@ -1042,3 +1066,79 @@ body.admin-page {
     font-size: 0.85rem;
     margin-right: 5px;
 }
+
+
+
+
+
+/* =========================================
+   SEARCH & FILTER BAR STYLES 
+   ========================================= */
+.search-filter-bar {
+    max-width: 1200px; /* FIX 1: Changed 12px back to 1200px so it has room to exist */
+    width: 100%;
+    
+    /* FIX 2: A gentle -40px pulls it up just enough. If you need it higher, try -60px or -80px max! */
+    margin: -40px auto 40px auto; 
+    
+    /* If you want to push it further to the right, increase this padding */
+    padding-left: 0px; 
+
+    display: flex;
+    gap: 20px; 
+    justify-content: flex-start; 
+    align-items: center;
+    flex-wrap: nowrap; 
+}
+
+/* The main search box */
+.search-filter-bar input[type="text"] {
+    width: 280px; /* Fixed width so it doesn't stretch too far */
+}
+
+/* Groups the label and the input together */
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap; /* Prevents text from breaking into two lines */
+}
+
+.filter-group label {
+    font-size: 1rem;
+    color: white; /* Changed to white to match your screenshot perfectly */
+}
+
+/* Styling for all inputs in the bar */
+.search-filter-bar input {
+    padding: 10px 15px;
+    background: #f0f0f0; /* Light whitish-gray background */
+    border: none;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    color: #000;
+}
+
+.search-filter-bar input:focus {
+    box-shadow: 0 0 10px rgba(214, 51, 255, 0.5); /* Purple glow on click */
+}
+
+/* The Red Clear Button */
+.clear-btn {
+    background: #ff3b3b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: transform 0.2s;
+}
+
+.clear-btn:hover {
+    transform: scale(1.05);
+}
+
+
+

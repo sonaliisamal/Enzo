@@ -244,40 +244,103 @@ if (window.location.pathname.includes('admin.html')) {
 }
 
 // ==========================================
-// 4. DYNAMIC EVENTS PAGE LOGIC
+// 4. DYNAMIC EVENTS PAGE LOGIC (With Live Search)
 // ==========================================
 if (window.location.pathname.includes('events.html')) {
     const eventsList = document.getElementById('eventsList');
+    const searchInput = document.getElementById('searchInput');
+    const dateFilter = document.getElementById('dateFilter');
+    const timeFilter = document.getElementById('timeFilter');
+    const clearFilters = document.getElementById('clearFilters');
 
-    async function loadUserEvents() {
+    let allEvents = []; // Master list to store events from the database
+
+    // 1. Fetch all events ONCE when the page loads
+    async function fetchAndLoadEvents() {
         try {
             const response = await fetch('http://localhost:5000/api/events');
             const data = await response.json();
-            eventsList.innerHTML = ''; 
 
             if (data.success) {
-                data.data.forEach((event, index) => {
-                    const imageUrl = event.image_url ? `http://localhost:5000${event.image_url}` : `images/poster${(index % 6) + 1}.jpg`;
-                    
-                    const card = document.createElement('div');
-                    card.className = 'poster-card';
-                    card.style.flexDirection = 'column'; // Stack image and text
-                    
-                    // NEW: We add the H3 title below the image so it is always visible!
-                    card.innerHTML = `
-                        <a href="event-detail.html?id=${event.event_id}" style="text-decoration: none; color: white;">
-                            <img src="${imageUrl}" alt="${event.name}" onerror="this.src='images/hacktag.jpeg'" style="background: #222; min-height: 200px;">
-                            <h3 style="text-align: center; margin-top: 15px; font-family: 'Inter', sans-serif;">${event.name}</h3>
-                        </a>
-                    `;
-                    eventsList.appendChild(card);
-                });
+                allEvents = data.data; 
+                renderEvents(allEvents); // Draw all of them initially
             }
         } catch (error) {
             eventsList.innerHTML = '<p style="color:white;">Failed to load events.</p>';
         }
-    } 
-    loadUserEvents();
+    }
+
+    // 2. The function that actually draws the HTML cards
+    function renderEvents(eventsToDisplay) {
+        eventsList.innerHTML = ''; 
+
+        // If the filter results in nothing, show a message
+        if (eventsToDisplay.length === 0) {
+            eventsList.innerHTML = '<p style="color:#ccc; text-align:center; grid-column: 1/-1;">No events found matching your search criteria.</p>';
+            return;
+        }
+
+        eventsToDisplay.forEach((event, index) => {
+            const imageUrl = event.image_url ? `http://localhost:5000${event.image_url}` : `images/poster${(index % 6) + 1}.jpg`;
+            
+            const card = document.createElement('div');
+            card.className = 'poster-card';
+            card.style.flexDirection = 'column';
+            card.innerHTML = `
+                <a href="event-detail.html?id=${event.event_id}" style="text-decoration: none; color: white;">
+                    <img src="${imageUrl}" alt="${event.name}" onerror="this.src='images/hacktag.jpeg'" style="background: #222; min-height: 200px;">
+                    <h3 style="text-align: center; margin-top: 15px; font-family: 'Inter', sans-serif;">${event.name}</h3>
+                </a>
+            `;
+            eventsList.appendChild(card);
+        });
+    }
+
+    // 3. The Live Filter Logic
+    function applyFilters() {
+        const searchText = searchInput.value.toLowerCase();
+        const filterDate = dateFilter.value; // format: "YYYY-MM-DD"
+        const filterTime = timeFilter.value; // format: "HH:MM"
+
+        const filteredEvents = allEvents.filter(event => {
+            // Check Name Match
+            const matchesSearch = event.name.toLowerCase().includes(searchText);
+            
+            // Check Date Match (Database dates start with YYYY-MM-DD)
+            let matchesDate = true;
+            if (filterDate) {
+                matchesDate = event.date.startsWith(filterDate);
+            }
+
+            // Check Time Match (Show events starting at or after the selected time)
+            let matchesTime = true;
+            if (filterTime) {
+                // simple string comparison works for 24-hour time strings like "14:30:00" >= "14:30"
+                matchesTime = event.start_time >= filterTime; 
+            }
+
+            // Keep the event only if it matches ALL active filters
+            return matchesSearch && matchesDate && matchesTime;
+        });
+
+        renderEvents(filteredEvents); // Redraw the grid with the filtered list
+    }
+
+    // 4. Attach Event Listeners to the inputs so it filters automatically
+    searchInput?.addEventListener('input', applyFilters);
+    dateFilter?.addEventListener('change', applyFilters);
+    timeFilter?.addEventListener('change', applyFilters);
+
+    // 5. Clear Button Logic
+    clearFilters?.addEventListener('click', () => {
+        searchInput.value = '';
+        dateFilter.value = '';
+        timeFilter.value = '';
+        renderEvents(allEvents); // Show everything again
+    });
+
+    // Start the process!
+    fetchAndLoadEvents();
 }
 
 // ==========================================
