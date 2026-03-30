@@ -181,6 +181,7 @@ body.events-page {
     margin-top: 20px; 
 }
 
+
 /* The gray bordered card holding the image and text */
 .poster-card {
     background-color: #566573; 
@@ -189,8 +190,13 @@ body.events-page {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     display: flex;
-    flex-direction: column; /* Stacks image and text vertically */
-    width: 100%; /* Ensures the box fills the grid column */
+    flex-direction: column; 
+    width: 100%; 
+    height: 100%; 
+    justify-content: flex-start;
+    
+    /* THE MAGIC FIX: Prevents massive images from blowing out the grid column width! */
+    min-width: 0; 
 }
 
 .poster-card:hover {
@@ -205,16 +211,23 @@ body.events-page {
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 100%; /* NEW: Ensures the link structure doesn't collapse */
 }
 
 /* The exact 4:5 poster image inside the card */
+/* The exact 4:5 poster image inside the card */
 .poster-card img {
     width: 100%;
-    aspect-ratio: 4 / 5;       /* Forces the perfect 4:5 portrait size */
-    object-fit: cover;         /* Crops perfectly without stretching */
+    aspect-ratio: 4 / 5 !important; /* Forces the 4:5 shape */
+    object-fit: cover !important;   /* Slices off the excess edges */
+    object-position: center;        /* Keeps the center of the image visible */
+    
+    /* THE MAGIC FIX: Tells Flexbox it is strictly forbidden from squishing this image! */
+    flex-shrink: 0; 
+    
     display: block;
     border-radius: 4px;
-    background: #222;          /* Dark fallback background before image loads */
+    background: #222;          
 }
 
 /* The event title exactly below the image */
