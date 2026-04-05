@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENZO | Contact Us</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body class="contact-page">
+
+    <nav class="navbar">
+        <div class="logo">ENZO</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="#" onclick="showLogoutModal()">Logout</a></li>
+            <li><a href="contact.html" class="active">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <div class="contact-container">
+        <div class="contact-info">
+            <h2>Get in Touch</h2>
+            <p>Have a question about an upcoming event? Want to partner with us or report a bug? Drop us a message and our team will get back to you within 24 hours.</p>
+            
+            <div class="info-details">
+                <div class="info-item">
+                    <strong>📍 Address:</strong>
+                    <span>123 Campus Drive, Tech Block B</span>
+                </div>
+                <div class="info-item">
+                    <strong>📧 Email:</strong>
+                    <span>support@enzoevents.com</span>
+                </div>
+                <div class="info-item">
+                    <strong>📞 Phone:</strong>
+                    <span>+1 (555) 123-4567</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form-wrapper">
+            <form id="contactForm" class="contact-form">
+                <div class="input-row">
+                    <input type="text" id="contactName" placeholder="Your Name" required>
+                    <input type="email" id="contactEmail" placeholder="Your Email" required>
+                </div>
+                <input type="text" id="contactSubject" placeholder="Subject" required>
+                <textarea id="contactMessage" rows="6" placeholder="How can we help you?" required></textarea>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
