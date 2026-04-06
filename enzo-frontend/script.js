@@ -451,3 +451,25 @@ if (window.location.pathname.includes('event-detail.html')) {
         });
     }
 }
+
+
+
+// ==========================================
+// CONTACT PAGE LOGIC
+// ==========================================
+const contactForm = document.getElementById('contactForm');
+
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevents the page from refreshing
+        
+        // Grab the user's name just to make the alert friendly
+        const name = document.getElementById('contactName').value;
+        
+        // Show success message
+        alert(`Thanks for reaching out, ${name}! We have received your message and will get back to you soon.`);
+        
+        // Clear the form fields
+        contactForm.reset();
+    });
+}
